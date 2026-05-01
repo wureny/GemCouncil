@@ -1,2 +1,13 @@
 productv0.md
 .worktrees/
+node_modules/
+.next/
+out/
+dist/
+coverage/
+.env
+.env*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
