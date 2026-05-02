@@ -44,6 +44,10 @@ export type InterviewEvent =
   | { type: "USER_ANSWER_FAILED"; message: string }
   | { type: "RESET_ERROR" };
 
+function createSessionId() {
+  return globalThis.crypto?.randomUUID?.() ?? `session-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
 export function createInterviewSession(options?: {
   setup?: Partial<InterviewSetup>;
   maxUserTurns?: number;
@@ -60,7 +64,7 @@ export function createInterviewSession(options?: {
 
   return {
     session: {
-      id: crypto.randomUUID(),
+      id: createSessionId(),
       mode: "interview",
       status: "setup",
       createdAt: options?.now ?? new Date().toISOString(),
