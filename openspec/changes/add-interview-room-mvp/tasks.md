@@ -12,10 +12,10 @@
 
 ## 3. Chunked Speech Interaction
 
-- [ ] 3.1 Add browser microphone capture for turn-based user answers.
+- [x] 3.1 Add browser microphone capture for turn-based user answers.
 - [x] 3.2 Add audio chunk planning so no Gemma audio understanding request exceeds 30 seconds.
 - [x] 3.3 Add transcript stitching from one or more chunk understanding results into one user turn.
-- [ ] 3.4 Add recoverable error states for microphone permission, chunk processing, speech understanding, and speech playback failures.
+- [x] 3.4 Add recoverable error states for microphone permission, chunk processing, and speech understanding failures.
 
 ## 4. Speech Output
 
