@@ -9,6 +9,7 @@
 - [x] 2.1 Add interview session state management with setup, active, feedback-ready, completed, and failed states.
 - [x] 2.2 Add interviewer turn generation through a model reasoning provider with deterministic mock fallback.
 - [x] 2.3 Add turn budget handling and early session ending.
+- [x] 2.4 Add interviewer policy decisions for proactive openings, targeted follow-ups, and next-question progression.
 
 ## 3. Chunked Speech Interaction
 

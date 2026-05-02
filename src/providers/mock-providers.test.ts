@@ -37,7 +37,7 @@ describe("mock providers", () => {
       source: "built-in",
     });
     await expect(
-      providers.modelReasoning.generate([{ role: "user", content: "Start a general English interview" }]),
+      providers.modelReasoning.generate([{ role: "user", content: "Open the interview proactively" }]),
     ).resolves.toMatchObject({
       text: expect.stringContaining("tell me about yourself"),
     });

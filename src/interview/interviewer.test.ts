@@ -1,9 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { createInterviewSession, interviewReducer } from "./interview-session";
-import { generateInterviewerResponse } from "./interviewer";
+import { decideInterviewerPolicy, generateInterviewerResponse } from "./interviewer";
 import { MockModelReasoningProvider } from "@/providers/mock-providers";
 
 describe("generateInterviewerResponse", () => {
+  it("chooses a proactive opening policy before the user answers", () => {
+    const decision = decideInterviewerPolicy(createInterviewSession().session);
+
+    expect(decision.kind).toBe("first_question");
+    expect(decision.instruction).toContain("Open the interview proactively");
+  });
+
   it("generates a first interview question", async () => {
     const response = await generateInterviewerResponse(
       new MockModelReasoningProvider(),
@@ -26,5 +33,20 @@ describe("generateInterviewerResponse", () => {
 
     expect(response.kind).toBe("follow_up");
     expect(response.text).toContain("concrete example");
+  });
+
+  it("moves to a new question after a substantial answer", async () => {
+    const state = interviewReducer(createInterviewSession(), {
+      type: "USER_TURN_ADDED",
+      turnId: "turn-1",
+      text:
+        "In my previous project, I coordinated with design and backend teams, clarified the release risk, and proposed a smaller scope that still solved the customer problem.",
+      at: "2026-05-02T00:00:00.000Z",
+    });
+
+    const response = await generateInterviewerResponse(new MockModelReasoningProvider(), state.session);
+
+    expect(response.kind).toBe("next_question");
+    expect(response.text).toContain("difficult conversation");
   });
 });
