@@ -52,6 +52,14 @@ Rationale: transcripts are cheaper, easier to test, easier to validate, and bett
 
 Alternative considered: keep raw audio as the primary session context. This would be expensive, harder to inspect, and brittle across provider choices.
 
+### Decision: Keep interviewer initiative in system policy
+
+The interviewer's proactive behavior is controlled by application policy before model generation. The policy decides whether the next turn is an opening question, a targeted follow-up, or a new question; the model provider then writes the actual interviewer wording under those constraints.
+
+Rationale: realistic interviews require the interviewer to manage the conversation, but leaving all initiative to the model would make turn-taking, feedback timing, and future TTS playback harder to control.
+
+Alternative considered: let the LLM freely decide the next action from transcript history. That could feel more flexible, but it would make demos less deterministic and would blur the boundary between product orchestration and language generation.
+
 ### Decision: Implement mock providers alongside real provider boundaries
 
 The MVP should include deterministic mock implementations for speech understanding, speech output, and interviewer reasoning.
