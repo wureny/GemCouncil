@@ -20,7 +20,7 @@ describe("interview session state", () => {
     expect(state.phase).toBe("setup");
   });
 
-  it("starts with an interviewer turn and becomes ready for user answer", () => {
+  it("starts with an interviewer turn and waits while speech plays", () => {
     const started = interviewReducer(createInterviewSession(), {
       type: "INTERVIEWER_TURN_ADDED",
       turnId: "turn-1",
@@ -29,7 +29,7 @@ describe("interview session state", () => {
       at: "2026-05-01T00:00:00.000Z",
     });
 
-    expect(started.phase).toBe("ready_for_user");
+    expect(started.phase).toBe("speaking");
     expect(started.session.status).toBe("active");
     expect(started.session.turns).toHaveLength(1);
     expect(started.session.turns[0]).toMatchObject({
@@ -40,6 +40,52 @@ describe("interview session state", () => {
       audioUrl: "blob:interviewer",
       startedAt: "2026-05-01T00:00:00.000Z",
     });
+  });
+
+  it("becomes ready for user answer after interviewer speech finishes", () => {
+    const speaking = interviewReducer(createInterviewSession(), {
+      type: "INTERVIEWER_TURN_ADDED",
+      turnId: "turn-1",
+      text: "Tell me about yourself.",
+      audioUrl: "blob:interviewer",
+      at: "2026-05-01T00:00:00.000Z",
+    });
+
+    const ready = interviewReducer(speaking, { type: "INTERVIEWER_SPEECH_FINISHED" });
+
+    expect(ready.phase).toBe("ready_for_user");
+    expect(ready.error).toBeUndefined();
+  });
+
+  it("can re-enter speaking state to replay the latest interviewer turn", () => {
+    const ready = {
+      ...createInterviewSession(),
+      phase: "ready_for_user" as const,
+    };
+
+    const speaking = interviewReducer(ready, { type: "INTERVIEWER_SPEECH_STARTED" });
+
+    expect(speaking.phase).toBe("speaking");
+    expect(speaking.error).toBeUndefined();
+  });
+
+  it("keeps transcript available when interviewer speech playback fails", () => {
+    const speaking = interviewReducer(createInterviewSession(), {
+      type: "INTERVIEWER_TURN_ADDED",
+      turnId: "turn-1",
+      text: "Tell me about yourself.",
+      audioUrl: "blob:interviewer",
+      at: "2026-05-01T00:00:00.000Z",
+    });
+
+    const ready = interviewReducer(speaking, {
+      type: "INTERVIEWER_SPEECH_FAILED",
+      message: "Audio playback failed.",
+    });
+
+    expect(ready.phase).toBe("ready_for_user");
+    expect(ready.error).toBe("Audio playback failed.");
+    expect(ready.session.turns[0]?.text).toBe("Tell me about yourself.");
   });
 
   it("moves through listening and user-answer processing phases", () => {

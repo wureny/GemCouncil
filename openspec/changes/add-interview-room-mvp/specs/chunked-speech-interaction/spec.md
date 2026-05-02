@@ -66,6 +66,13 @@ The system SHALL play interviewer questions and follow-ups as speech output.
 - **THEN** the system requests speech output for that response
 - **AND** plays the generated audio for the user
 - **AND** shows the same response text in the transcript
+- **AND** waits for playback to finish before accepting the user's next answer
+
+#### Scenario: User replays interviewer speech
+
+- **WHEN** an interviewer turn has generated speech output
+- **THEN** the user can replay the latest interviewer audio
+- **AND** the system returns to the ready state after replay finishes
 
 #### Scenario: Speech output fails
 

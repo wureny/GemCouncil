@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { understandRecordedAnswer } from "@/audio/recorded-answer";
+import { playSpeechOutput } from "@/audio/speech-playback";
+import type { AudioOutput } from "@/domain/providers";
 import type { FeedbackReport as FeedbackReportData, InterviewSetup as InterviewSetupData } from "@/domain/session";
 import { createMockInterviewFeedback } from "@/feedback/interview-feedback";
 import { createInterviewSession, interviewReducer, type InterviewRuntimeState } from "@/interview/interview-session";
@@ -15,6 +17,7 @@ export function InterviewExperience() {
   const providers = useMemo(() => createMockProviderSet(), []);
   const [state, setState] = useState<InterviewRuntimeState>(() => createInterviewSession());
   const [report, setReport] = useState<FeedbackReportData | null>(null);
+  const [latestSpeech, setLatestSpeech] = useState<AudioOutput | null>(null);
   const [recordingError, setRecordingError] = useState<string | null>(null);
   const stateRef = useRef(state);
   const recorderRef = useRef<MediaRecorder | null>(null);
@@ -26,6 +29,38 @@ export function InterviewExperience() {
     stateRef.current = state;
   }, [state]);
 
+  useEffect(() => {
+    if (state.phase !== "speaking" || !latestSpeech) {
+      return;
+    }
+
+    const playback = playSpeechOutput(latestSpeech);
+    let cancelled = false;
+
+    void playback.done
+      .then(() => {
+        if (!cancelled) {
+          setState((current) => interviewReducer(current, { type: "INTERVIEWER_SPEECH_FINISHED" }));
+        }
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          const message = error instanceof Error ? error.message : "Interviewer speech playback failed.";
+          setState((current) =>
+            interviewReducer(current, {
+              type: "INTERVIEWER_SPEECH_FAILED",
+              message,
+            }),
+          );
+        }
+      });
+
+    return () => {
+      cancelled = true;
+      playback.stop();
+    };
+  }, [latestSpeech, state.phase]);
+
   async function startInterview(setup: Partial<InterviewSetupData>) {
     const next = createInterviewSession({ setup });
     const response = await generateInterviewerResponse(providers.modelReasoning, next.session);
@@ -33,6 +68,7 @@ export function InterviewExperience() {
       id: "interviewer-default",
       label: "Interviewer",
     });
+    setLatestSpeech(speech);
 
     setState(
       interviewReducer(next, {
@@ -66,6 +102,7 @@ export function InterviewExperience() {
       id: "interviewer-default",
       label: "Interviewer",
     });
+    setLatestSpeech(speech);
 
     setState(
       interviewReducer(withAnswer, {
@@ -82,6 +119,12 @@ export function InterviewExperience() {
     await continueAfterUserAnswer(
       "I want to practice answering clearly under pressure, especially giving concrete examples in English.",
     );
+  }
+
+  function replayInterviewerSpeech() {
+    if (latestSpeech) {
+      setState((current) => interviewReducer(current, { type: "INTERVIEWER_SPEECH_STARTED" }));
+    }
   }
 
   async function startRecording() {
@@ -171,6 +214,7 @@ export function InterviewExperience() {
           onStartRecording={startRecording}
           onStopRecording={stopRecording}
           onSubmitAnswer={submitMockAnswer}
+          onReplayInterviewer={replayInterviewerSpeech}
           onEnd={endSession}
         />
       )}
