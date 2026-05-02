@@ -1,5 +1,10 @@
 import type { ConversationTurn, InterviewSetup, PracticeSession } from "@/domain/session";
 
+export type InterviewPracticeSession = Omit<PracticeSession, "mode" | "setup"> & {
+  mode: "interview";
+  setup: InterviewSetup;
+};
+
 export type InterviewPhase =
   | "setup"
   | "ready_for_user"
@@ -12,7 +17,7 @@ export type InterviewPhase =
   | "failed";
 
 export interface InterviewRuntimeState {
-  session: PracticeSession;
+  session: InterviewPracticeSession;
   phase: InterviewPhase;
   maxUserTurns: number;
   userTurnCount: number;
@@ -162,4 +167,7 @@ export function interviewReducer(
         },
       };
   }
+
+  const exhaustiveEvent: never = event;
+  return exhaustiveEvent;
 }
