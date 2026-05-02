@@ -4,14 +4,21 @@ import type { InterviewRuntimeState } from "@/interview/interview-session";
 
 export function InterviewRoom({
   state,
+  recordingError,
+  onStartRecording,
+  onStopRecording,
   onSubmitAnswer,
   onEnd,
 }: {
   state: InterviewRuntimeState;
+  recordingError?: string | null;
+  onStartRecording: () => void;
+  onStopRecording: () => void;
   onSubmitAnswer: () => void;
   onEnd: () => void;
 }) {
   const canAnswer = state.phase === "ready_for_user";
+  const isListening = state.phase === "listening";
 
   return (
     <section className="border border-ink/15 bg-white p-6">
@@ -34,13 +41,35 @@ export function InterviewRoom({
         ))}
       </div>
 
-      <button
-        className="mt-6 w-full border border-ink bg-ink px-4 py-3 text-left font-semibold text-white transition enabled:hover:bg-moss disabled:cursor-not-allowed disabled:opacity-45"
-        disabled={!canAnswer}
-        onClick={onSubmitAnswer}
-      >
-        Submit mock spoken answer
-      </button>
+      {recordingError ? (
+        <p className="mt-4 border border-signal/40 bg-signal/10 p-3 text-sm text-signal">
+          {recordingError}
+        </p>
+      ) : null}
+
+      <div className="mt-6 grid gap-3 md:grid-cols-3">
+        <button
+          className="border border-ink bg-ink px-4 py-3 text-left font-semibold text-white transition enabled:hover:bg-moss disabled:cursor-not-allowed disabled:opacity-45"
+          disabled={!canAnswer}
+          onClick={onStartRecording}
+        >
+          Start recording
+        </button>
+        <button
+          className="border border-ink px-4 py-3 text-left font-semibold transition enabled:hover:bg-ink enabled:hover:text-white disabled:cursor-not-allowed disabled:opacity-45"
+          disabled={!isListening}
+          onClick={onStopRecording}
+        >
+          Stop and submit
+        </button>
+        <button
+          className="border border-ink/40 px-4 py-3 text-left font-semibold text-slate transition enabled:hover:border-ink enabled:hover:text-ink disabled:cursor-not-allowed disabled:opacity-45"
+          disabled={!canAnswer}
+          onClick={onSubmitAnswer}
+        >
+          Use mock answer
+        </button>
+      </div>
     </section>
   );
 }
