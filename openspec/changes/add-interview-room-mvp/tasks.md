@@ -20,8 +20,8 @@
 
 ## 4. Speech Output
 
-- [ ] 4.1 Add speech output provider route or adapter for interviewer responses.
-- [ ] 4.2 Add audio playback controls for generated interviewer speech.
+- [x] 4.1 Add speech output provider route or adapter for interviewer responses.
+- [x] 4.2 Add audio playback controls for generated interviewer speech.
 - [x] 4.3 Add text fallback visibility through transcript-first interviewer responses.
 
 ## 5. Feedback

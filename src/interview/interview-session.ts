@@ -38,8 +38,11 @@ export type InterviewEvent =
       text: string;
       at: string;
     }
+  | { type: "INTERVIEWER_SPEECH_STARTED" }
   | { type: "START_LISTENING" }
   | { type: "STOP_LISTENING" }
+  | { type: "INTERVIEWER_SPEECH_FINISHED" }
+  | { type: "INTERVIEWER_SPEECH_FAILED"; message: string }
   | { type: "END_EARLY" }
   | { type: "USER_ANSWER_FAILED"; message: string }
   | { type: "RESET_ERROR" };
@@ -94,7 +97,7 @@ export function interviewReducer(
 
       return {
         ...state,
-        phase: "ready_for_user",
+        phase: event.audioUrl ? "speaking" : "ready_for_user",
         error: undefined,
         session: {
           ...state.session,
@@ -103,6 +106,13 @@ export function interviewReducer(
         },
       };
     }
+
+    case "INTERVIEWER_SPEECH_STARTED":
+      return {
+        ...state,
+        phase: "speaking",
+        error: undefined,
+      };
 
     case "START_LISTENING":
       return {
@@ -114,6 +124,20 @@ export function interviewReducer(
       return {
         ...state,
         phase: "processing_user_answer",
+      };
+
+    case "INTERVIEWER_SPEECH_FINISHED":
+      return {
+        ...state,
+        phase: "ready_for_user",
+        error: undefined,
+      };
+
+    case "INTERVIEWER_SPEECH_FAILED":
+      return {
+        ...state,
+        phase: "ready_for_user",
+        error: event.message,
       };
 
     case "USER_TURN_ADDED": {

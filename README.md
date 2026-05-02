@@ -13,6 +13,7 @@ Current Interview Mode status:
 - Setup form, interview transcript, mock answer submission, interviewer follow-up generation, and structured feedback are implemented.
 - Audio chunk planning and transcript stitching utilities are implemented so Gemma audio requests can stay below the 30-second per-request limit.
 - Real microphone recording is implemented and currently feeds mock speech understanding.
+- Interviewer speech playback state and replay controls are implemented with a mock speech adapter.
 - Gemma speech understanding and high-quality TTS provider integration are next.
 - Meeting Mode remains deferred until Interview Room is usable with real voice providers.
 
