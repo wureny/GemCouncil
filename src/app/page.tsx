@@ -1,3 +1,5 @@
+import { InterviewExperience } from "@/components/interview/InterviewExperience";
+
 const practiceModes = [
   {
     title: "Interview Room",
@@ -14,7 +16,7 @@ const practiceModes = [
 export default function Home() {
   return (
     <main className="min-h-screen bg-paper text-ink">
-      <section className="mx-auto flex min-h-screen w-full max-w-6xl flex-col justify-center px-6 py-10">
+      <section className="mx-auto flex w-full max-w-6xl flex-col px-6 py-10">
         <p className="mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-moss">
           GemCouncil
         </p>
@@ -36,10 +38,14 @@ export default function Home() {
               </div>
               <p className="min-h-16 text-base leading-7 text-slate">{mode.description}</p>
               <button className="mt-6 w-full border border-ink px-4 py-3 text-left font-semibold transition hover:bg-ink hover:text-white">
-                Start setup
+                {mode.title === "Interview Room" ? "Available below" : "Coming next"}
               </button>
             </article>
           ))}
+        </div>
+
+        <div className="mt-12">
+          <InterviewExperience />
         </div>
       </section>
     </main>

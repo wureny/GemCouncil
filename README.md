@@ -6,9 +6,14 @@ The v0 product direction is documented in `docs/superpowers/specs/2026-05-01-gem
 
 ## Current Status
 
-This repository is in the app foundation phase. The current OpenSpec change is `add-app-foundation`, which establishes the web app scaffold, shared contracts, provider interfaces, verification workflow, and deployment baseline.
+This repository is in the Interview Room MVP phase. The current OpenSpec change is `add-interview-room-mvp`, which adds the first mock end-to-end interview loop on top of the app foundation.
 
-Interview and Meeting session behavior are intentionally deferred to later OpenSpec changes.
+Current Interview Mode status:
+
+- Setup form, interview transcript, mock answer submission, interviewer follow-up generation, and structured feedback are implemented.
+- Audio chunk planning and transcript stitching utilities are implemented so Gemma audio requests can stay below the 30-second per-request limit.
+- Real microphone recording, Gemma speech understanding, and high-quality TTS provider integration are next.
+- Meeting Mode remains deferred until Interview Room is usable with real voice providers.
 
 ## Development
 
