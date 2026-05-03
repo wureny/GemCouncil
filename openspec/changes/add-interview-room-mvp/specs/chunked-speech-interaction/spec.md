@@ -47,7 +47,16 @@ The system SHALL combine speech understanding results from one or more chunks in
 - **WHEN** the app is configured to use Gemma speech understanding
 - **THEN** the speech understanding provider sends each audio chunk to the internal speech understanding route
 - **AND** the internal route forwards the chunk to the configured Gemma speech service
+- **AND** the internal route may add server-side authentication headers without exposing secrets to the browser
+- **AND** the internal route applies a bounded timeout to the remote request
 - **AND** the returned transcript is used as the chunk transcript
+
+#### Scenario: Gemma speech provider health check
+
+- **WHEN** the app checks the internal speech understanding route with `GET`
+- **THEN** the system reports whether the remote Gemma speech service is configured
+- **AND** attempts a remote health check when a service URL is configured
+- **AND** normalizes remote health failures into a diagnostic response
 
 #### Scenario: Gemma speech service unavailable
 

@@ -7,7 +7,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadFile
 from pydantic import BaseModel, Field
 
 
@@ -25,7 +25,7 @@ class SpeechUnderstandingResponse(BaseModel):
 
 
 @app.get("/health")
-def health() -> dict[str, Any]:
+def health(_: None = Depends(require_api_key)) -> dict[str, Any]:
     return {
         "ok": True,
         "model_id": os.getenv("GEMMA_MODEL_ID", DEFAULT_MODEL_ID),
@@ -35,6 +35,7 @@ def health() -> dict[str, Any]:
 
 @app.post("/speech/understand")
 async def understand_speech(
+    _: None = Depends(require_api_key),
     audio: UploadFile = File(...),
     durationMs: str = Form("0"),
     mimeType: str = Form("audio/webm"),
@@ -69,6 +70,15 @@ async def understand_speech(
         return get_gemma_engine().understand(audio_path, session_context)
     finally:
         audio_path.unlink(missing_ok=True)
+
+
+def require_api_key(authorization: str | None = Header(default=None)) -> None:
+    expected = os.getenv("GEMMA_SPEECH_API_KEY")
+    if not expected:
+        return
+
+    if authorization != f"Bearer {expected}":
+        raise HTTPException(status_code=401, detail="Invalid or missing API key.")
 
 
 class GemmaSpeechEngine:

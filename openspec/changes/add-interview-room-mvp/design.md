@@ -60,6 +60,14 @@ Rationale: Gemma speech understanding needs Python, Hugging Face Transformers, m
 
 Alternative considered: load Gemma from the Next.js app. That would couple the web app to heavy model dependencies and would not fit Vercel-style deployment.
 
+### Decision: Treat model providers as remote GPU services
+
+Gemma speech understanding and future VoxCPM speech output are deployed as remote GPU services, typically Hugging Face Spaces GPU for the hackathon and RunPod or Modal if more stability is needed. The Next.js app uses server-side proxy routes to add authentication, timeouts, health checks, and normalized errors.
+
+Rationale: the project needs a public demo URL, and neither Gemma nor VoxCPM should depend on the developer's local machine. Remote-first provider contracts keep the web app deployable while preserving model flexibility.
+
+Alternative considered: run providers locally during the demo. That would make the public project link unreliable and would hide deployment risks until the end.
+
 ### Decision: Keep interviewer initiative in system policy
 
 The interviewer's proactive behavior is controlled by application policy before model generation. The policy decides whether the next turn is an opening question, a targeted follow-up, or a new question; the model provider then writes the actual interviewer wording under those constraints.
