@@ -14,7 +14,8 @@ Current Interview Mode status:
 - Audio chunk planning and transcript stitching utilities are implemented so Gemma audio requests can stay below the 30-second per-request limit.
 - Real microphone recording is implemented and currently feeds mock speech understanding.
 - Interviewer speech playback state and replay controls are implemented with a mock speech adapter.
-- Gemma speech understanding and high-quality TTS provider integration are next.
+- Gemma speech understanding can be enabled through the `services/gemma-speech` FastAPI service and `NEXT_PUBLIC_SPEECH_UNDERSTANDING_PROVIDER=gemma`.
+- High-quality TTS provider integration is next.
 - Meeting Mode remains deferred until Interview Room is usable with real voice providers.
 
 ## Development
@@ -29,6 +30,23 @@ Start the local development server:
 
 ```bash
 npm run dev
+```
+
+Run the Gemma speech service in mock mode:
+
+```bash
+cd services/gemma-speech
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app:app --host 127.0.0.1 --port 8000
+```
+
+Enable the Gemma speech provider in the Next.js app:
+
+```bash
+NEXT_PUBLIC_SPEECH_UNDERSTANDING_PROVIDER=gemma
+GEMMA_SPEECH_API_URL=http://127.0.0.1:8000
 ```
 
 Run verification:

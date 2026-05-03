@@ -8,13 +8,13 @@ import type { FeedbackReport as FeedbackReportData, InterviewSetup as InterviewS
 import { createMockInterviewFeedback } from "@/feedback/interview-feedback";
 import { createInterviewSession, interviewReducer, type InterviewRuntimeState } from "@/interview/interview-session";
 import { generateInterviewerResponse } from "@/interview/interviewer";
-import { createMockProviderSet } from "@/providers/mock-providers";
+import { createInterviewProviderSet } from "@/providers/provider-set";
 import { FeedbackReport } from "./FeedbackReport";
 import { InterviewRoom } from "./InterviewRoom";
 import { InterviewSetup } from "./InterviewSetup";
 
 export function InterviewExperience() {
-  const providers = useMemo(() => createMockProviderSet(), []);
+  const providers = useMemo(() => createInterviewProviderSet(), []);
   const [state, setState] = useState<InterviewRuntimeState>(() => createInterviewSession());
   const [report, setReport] = useState<FeedbackReportData | null>(null);
   const [latestSpeech, setLatestSpeech] = useState<AudioOutput | null>(null);

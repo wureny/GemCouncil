@@ -17,6 +17,7 @@
 - [x] 3.2 Add audio chunk planning so no Gemma audio understanding request exceeds 30 seconds.
 - [x] 3.3 Add transcript stitching from one or more chunk understanding results into one user turn.
 - [x] 3.4 Add recoverable error states for microphone permission, chunk processing, and speech understanding failures.
+- [x] 3.5 Add Gemma speech understanding provider toggle, Next.js route proxy, and Python FastAPI service scaffold.
 
 ## 4. Speech Output
 
