@@ -1,8 +1,32 @@
 # GemCouncil
 
-GemCouncil is a voice-first practice room for non-native English speakers preparing for high-pressure interviews and business meetings.
+GemCouncil is a Gemma-powered communication equity coach for non-native English speakers preparing for high-pressure interviews and business meetings.
+
+The project uses open, remote-deployable model services to help people practice the room before they enter the room: users speak naturally, an AI interviewer listens and follows up, and the system produces transparent feedback grounded in the user's own answers.
 
 The v0 product direction is documented in `docs/superpowers/specs/2026-05-01-gemcouncil-v0-product-design.md`.
+
+## Hackathon Positioning
+
+GemCouncil targets **Digital Equity & Inclusivity** and **Future of Education**. Many capable people lose opportunities because live English interviews and meetings reward speed, confidence, accent familiarity, and implicit cultural patterns. GemCouncil gives them a private, affordable practice environment that simulates realistic spoken pressure and explains how to improve.
+
+The demo story:
+
+1. A non-native English speaker is preparing for an English interview or global team meeting.
+2. They practice with a proactive AI interviewer that asks one question at a time and follows up when answers are vague.
+3. Gemma speech understanding turns spoken answers into structured conversation context.
+4. The system generates spoken interviewer responses through a remote TTS provider.
+5. The final report gives scores, evidence, and better answer examples instead of generic encouragement.
+
+Gemma 4 alignment:
+
+- **Multimodal understanding:** user answers are captured as speech and routed through a Gemma speech understanding provider.
+- **Agentic orchestration:** interviewer behavior is controlled by explicit actions such as opening question, follow-up, next question, redirect, and close.
+- **Grounded outputs:** future scenario packs and retrieval context will ground interview plans in real communication scenarios.
+- **Safety & Trust:** feedback should cite user-answer evidence and expose why each score was assigned.
+- **Deployable impact:** Vercel hosts the app, while Gemma and VoxCPM run as remote GPU services that can be deployed by schools, career centers, or community organizations.
+
+The hackathon strategy and demo narrative are documented in `docs/hackathon/gemma4-impact-strategy.md`.
 
 ## Current Status
 
@@ -17,6 +41,13 @@ Current Interview Mode status:
 - Gemma speech understanding can be enabled through the `services/gemma-speech` FastAPI service and `NEXT_PUBLIC_SPEECH_UNDERSTANDING_PROVIDER=gemma`.
 - VoxCPM TTS can be enabled through the `services/voxcpm-tts` FastAPI service and `NEXT_PUBLIC_SPEECH_OUTPUT_PROVIDER=voxcpm`.
 - Meeting Mode remains deferred until Interview Room is usable with real voice providers.
+
+Near-term product priorities:
+
+1. Add scenario packs for role, scholarship, research, and business meeting practice.
+2. Upgrade interviewer policy into function-call-style agent actions.
+3. Make feedback evidence-based by citing user answer snippets for each score.
+4. Add a concise demo script and submission writeup around communication equity.
 
 ## Development
 
