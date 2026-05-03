@@ -47,7 +47,10 @@ Enable the Gemma speech provider in the Next.js app:
 ```bash
 NEXT_PUBLIC_SPEECH_UNDERSTANDING_PROVIDER=gemma
 GEMMA_SPEECH_API_URL=http://127.0.0.1:8000
+GEMMA_SPEECH_API_KEY=replace-with-a-shared-secret
 ```
+
+Remote GPU provider deployment is documented in `docs/deployment/remote-providers.md`.
 
 Run verification:
 

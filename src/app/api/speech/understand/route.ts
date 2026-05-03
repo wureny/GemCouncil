@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { configuredRemoteProvider, fetchWithTimeout, remoteProviderHeaders } from "@/server/remote-provider";
 
 export const runtime = "nodejs";
 
@@ -10,9 +11,9 @@ interface SpeechUnderstandingBackendResponse {
 }
 
 export async function POST(request: Request) {
-  const backendUrl = process.env.GEMMA_SPEECH_API_URL;
+  const remote = gemmaSpeechRemoteConfig();
 
-  if (!backendUrl) {
+  if (!remote.baseUrl) {
     return NextResponse.json(
       {
         error:
@@ -36,10 +37,11 @@ export async function POST(request: Request) {
   appendIfPresent(upstream, incoming, "session");
 
   try {
-    const response = await fetch(`${backendUrl.replace(/\/$/, "")}/speech/understand`, {
+    const response = await fetchWithTimeout(`${remote.baseUrl.replace(/\/$/, "")}/speech/understand`, {
       method: "POST",
+      headers: remoteProviderHeaders(remote.apiKey),
       body: upstream,
-    });
+    }, remote.timeoutMs);
 
     if (!response.ok) {
       return NextResponse.json({ error: await upstreamErrorMessage(response) }, { status: response.status });
@@ -50,6 +52,51 @@ export async function POST(request: Request) {
     const message = error instanceof Error ? error.message : "Gemma speech backend request failed.";
     return NextResponse.json({ error: message }, { status: 502 });
   }
+}
+
+export async function GET() {
+  const remote = gemmaSpeechRemoteConfig();
+
+  if (!remote.baseUrl) {
+    return NextResponse.json({
+      ok: false,
+      provider: "gemma-speech",
+      configured: false,
+      error: "GEMMA_SPEECH_API_URL is not configured.",
+    });
+  }
+
+  try {
+    const response = await fetchWithTimeout(`${remote.baseUrl.replace(/\/$/, "")}/health`, {
+      headers: remoteProviderHeaders(remote.apiKey),
+      method: "GET",
+    }, remote.timeoutMs);
+
+    return NextResponse.json({
+      ok: response.ok,
+      provider: "gemma-speech",
+      configured: true,
+      remoteStatus: response.status,
+      remote: await optionalJson(response),
+    }, { status: response.ok ? 200 : 502 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Gemma speech backend health check failed.";
+    return NextResponse.json({
+      ok: false,
+      provider: "gemma-speech",
+      configured: true,
+      error: message,
+    }, { status: 502 });
+  }
+}
+
+function gemmaSpeechRemoteConfig() {
+  return configuredRemoteProvider({
+    apiKeyEnv: "GEMMA_SPEECH_API_KEY",
+    baseUrlEnv: "GEMMA_SPEECH_API_URL",
+    defaultTimeoutMs: 45000,
+    timeoutEnv: "GEMMA_SPEECH_TIMEOUT_MS",
+  });
 }
 
 function appendIfPresent(target: FormData, source: FormData, key: string) {
@@ -99,4 +146,12 @@ async function upstreamErrorMessage(response: Response) {
   }
 
   return response.statusText || "Gemma speech backend failed.";
+}
+
+async function optionalJson(response: Response) {
+  try {
+    return await response.json();
+  } catch {
+    return undefined;
+  }
 }
