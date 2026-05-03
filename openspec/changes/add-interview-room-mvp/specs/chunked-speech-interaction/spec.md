@@ -82,6 +82,22 @@ The system SHALL combine speech understanding results from one or more chunks in
 
 The system SHALL play interviewer questions and follow-ups as speech output.
 
+#### Scenario: VoxCPM speech output provider enabled
+
+- **WHEN** the app is configured to use VoxCPM speech output
+- **THEN** the speech output provider sends interviewer text and voice profile to the internal speech synthesis route
+- **AND** the internal route forwards the request to the configured VoxCPM TTS service
+- **AND** the internal route may add server-side authentication headers without exposing secrets to the browser
+- **AND** the internal route applies a bounded timeout to the remote request
+- **AND** the returned audio is used for interviewer speech playback
+
+#### Scenario: VoxCPM speech output provider health check
+
+- **WHEN** the app checks the internal speech synthesis route with `GET`
+- **THEN** the system reports whether the remote VoxCPM service is configured
+- **AND** attempts a remote health check when a service URL is configured
+- **AND** normalizes remote health failures into a diagnostic response
+
 #### Scenario: Speech output succeeds
 
 - **WHEN** the interviewer produces a text response

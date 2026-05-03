@@ -48,13 +48,27 @@ curl https://your-vercel-app.vercel.app/api/speech/understand
 
 ## VoxCPM TTS
 
-VoxCPM should follow the same pattern in a later change:
+Frontend mode:
 
 ```bash
 NEXT_PUBLIC_SPEECH_OUTPUT_PROVIDER=voxcpm
 VOXCPM_TTS_API_URL=https://your-voxcpm-space.hf.space
 VOXCPM_TTS_API_KEY=replace-with-a-shared-secret
 VOXCPM_TTS_TIMEOUT_MS=60000
+```
+
+Remote service secrets:
+
+```bash
+VOXCPM_TTS_MOCK=0
+VOXCPM_MODEL_ID=openbmb/VoxCPM2
+VOXCPM_TTS_API_KEY=replace-with-a-shared-secret
+```
+
+Health check from the web app:
+
+```bash
+curl https://your-vercel-app.vercel.app/api/speech/synthesize
 ```
 
 For the hackathon, prefer one service per model. Gemma and VoxCPM have different dependencies, memory profiles, cold starts, and failure modes.

@@ -62,7 +62,7 @@ Alternative considered: load Gemma from the Next.js app. That would couple the w
 
 ### Decision: Treat model providers as remote GPU services
 
-Gemma speech understanding and future VoxCPM speech output are deployed as remote GPU services, typically Hugging Face Spaces GPU for the hackathon and RunPod or Modal if more stability is needed. The Next.js app uses server-side proxy routes to add authentication, timeouts, health checks, and normalized errors.
+Gemma speech understanding and VoxCPM speech output are deployed as remote GPU services, typically Hugging Face Spaces GPU for the hackathon and RunPod or Modal if more stability is needed. The Next.js app uses server-side proxy routes to add authentication, timeouts, health checks, and normalized errors.
 
 Rationale: the project needs a public demo URL, and neither Gemma nor VoxCPM should depend on the developer's local machine. Remote-first provider contracts keep the web app deployable while preserving model flexibility.
 

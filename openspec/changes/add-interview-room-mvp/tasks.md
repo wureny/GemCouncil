@@ -25,6 +25,7 @@
 - [x] 4.1 Add speech output provider route or adapter for interviewer responses.
 - [x] 4.2 Add audio playback controls for generated interviewer speech.
 - [x] 4.3 Add text fallback visibility through transcript-first interviewer responses.
+- [x] 4.4 Add VoxCPM speech output provider toggle, Next.js route proxy, and Python FastAPI service scaffold.
 
 ## 5. Feedback
 

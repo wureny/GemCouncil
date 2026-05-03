@@ -15,7 +15,7 @@ Current Interview Mode status:
 - Real microphone recording is implemented and currently feeds mock speech understanding.
 - Interviewer speech playback state and replay controls are implemented with a mock speech adapter.
 - Gemma speech understanding can be enabled through the `services/gemma-speech` FastAPI service and `NEXT_PUBLIC_SPEECH_UNDERSTANDING_PROVIDER=gemma`.
-- High-quality TTS provider integration is next.
+- VoxCPM TTS can be enabled through the `services/voxcpm-tts` FastAPI service and `NEXT_PUBLIC_SPEECH_OUTPUT_PROVIDER=voxcpm`.
 - Meeting Mode remains deferred until Interview Room is usable with real voice providers.
 
 ## Development
@@ -48,6 +48,24 @@ Enable the Gemma speech provider in the Next.js app:
 NEXT_PUBLIC_SPEECH_UNDERSTANDING_PROVIDER=gemma
 GEMMA_SPEECH_API_URL=http://127.0.0.1:8000
 GEMMA_SPEECH_API_KEY=replace-with-a-shared-secret
+```
+
+Run the VoxCPM TTS service in mock mode:
+
+```bash
+cd services/voxcpm-tts
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app:app --host 127.0.0.1 --port 8010
+```
+
+Enable the VoxCPM speech output provider in the Next.js app:
+
+```bash
+NEXT_PUBLIC_SPEECH_OUTPUT_PROVIDER=voxcpm
+VOXCPM_TTS_API_URL=http://127.0.0.1:8010
+VOXCPM_TTS_API_KEY=replace-with-a-shared-secret
 ```
 
 Remote GPU provider deployment is documented in `docs/deployment/remote-providers.md`.
