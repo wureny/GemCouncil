@@ -42,6 +42,19 @@ The system SHALL split a single user answer into model-safe audio chunks before 
 
 The system SHALL combine speech understanding results from one or more chunks into a single user turn transcript.
 
+#### Scenario: Gemma speech provider enabled
+
+- **WHEN** the app is configured to use Gemma speech understanding
+- **THEN** the speech understanding provider sends each audio chunk to the internal speech understanding route
+- **AND** the internal route forwards the chunk to the configured Gemma speech service
+- **AND** the returned transcript is used as the chunk transcript
+
+#### Scenario: Gemma speech service unavailable
+
+- **WHEN** the Gemma speech provider is enabled but the service is missing or unavailable
+- **THEN** the system surfaces a recoverable speech understanding error
+- **AND** does not append a partial user answer transcript
+
 #### Scenario: Multiple chunk transcripts complete
 
 - **WHEN** all chunks for one user answer are understood

@@ -52,6 +52,14 @@ Rationale: transcripts are cheaper, easier to test, easier to validate, and bett
 
 Alternative considered: keep raw audio as the primary session context. This would be expensive, harder to inspect, and brittle across provider choices.
 
+### Decision: Use a separate Gemma speech service
+
+The Next.js app calls an internal speech understanding route, and that route forwards model-safe audio chunks to a separate Python FastAPI service running Gemma 3n. The browser never calls the Gemma service directly.
+
+Rationale: Gemma speech understanding needs Python, Hugging Face Transformers, model weights, and usually a GPU runtime. Keeping that outside Vercel and behind the `SpeechUnderstandingProvider` boundary lets the frontend keep using mock speech understanding when the service is unavailable.
+
+Alternative considered: load Gemma from the Next.js app. That would couple the web app to heavy model dependencies and would not fit Vercel-style deployment.
+
 ### Decision: Keep interviewer initiative in system policy
 
 The interviewer's proactive behavior is controlled by application policy before model generation. The policy decides whether the next turn is an opening question, a targeted follow-up, or a new question; the model provider then writes the actual interviewer wording under those constraints.
