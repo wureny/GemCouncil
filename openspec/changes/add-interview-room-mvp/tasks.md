@@ -10,6 +10,8 @@
 - [x] 2.2 Add interviewer turn generation through a model reasoning provider with deterministic mock fallback.
 - [x] 2.3 Add turn budget handling and early session ending.
 - [x] 2.4 Add interviewer policy decisions for proactive openings, targeted follow-ups, and next-question progression.
+- [ ] 2.5 Add scenario packs for grounded interview plans and rubrics.
+- [ ] 2.6 Upgrade interviewer policy decisions into function-call-style action objects.
 
 ## 3. Chunked Speech Interaction
 
@@ -32,6 +34,7 @@
 - [x] 5.1 Add structured feedback generation using interview setup and consolidated transcript.
 - [x] 5.2 Validate feedback score dimensions and report arrays before rendering.
 - [x] 5.3 Add feedback report UI with summary, five scores, strengths, improvements, better answer examples, and next practice.
+- [ ] 5.4 Add evidence-backed score rationales with concise transcript snippets.
 
 ## 6. Verification
 

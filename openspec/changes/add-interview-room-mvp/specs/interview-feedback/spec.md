@@ -17,6 +17,13 @@ The system SHALL generate a structured feedback report for a completed interview
 - **AND** each score is numeric
 - **AND** each score is bounded by the configured scoring range
 
+#### Scenario: Feedback score evidence
+
+- **WHEN** evidence-based feedback is enabled
+- **THEN** each score includes a short transcript evidence snippet or paraphrase
+- **AND** each score includes a rationale explaining how that evidence affected the score
+- **AND** the report keeps the evidence concise enough to avoid reproducing the full transcript
+
 ### Requirement: Feedback uses transcript context
 
 The system SHALL evaluate the interview using the consolidated conversation transcript and interview setup context.

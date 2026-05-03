@@ -17,6 +17,12 @@ The system SHALL allow a user to configure a general English interview practice 
 - **THEN** the system creates an interview session containing that setup context
 - **AND** the interviewer uses the setup context when choosing questions and follow-ups
 
+#### Scenario: Scenario-grounded setup
+
+- **WHEN** scenario packs are enabled
+- **THEN** the user can select a practice scenario such as general interview, software engineering interview, product manager interview, research discussion, scholarship interview, or international team meeting
+- **AND** the selected scenario provides question planning and evaluation rubric context for the interviewer
+
 ### Requirement: One-on-one interview room
 
 The system SHALL provide an active interview room with one AI interviewer and one user.
@@ -25,7 +31,7 @@ The system SHALL provide an active interview room with one AI interviewer and on
 
 - **WHEN** the interview session needs the next interviewer turn
 - **THEN** the system selects an interviewer action before calling the model provider
-- **AND** the action is one of opening question, targeted follow-up, or next question
+- **AND** the action is one of opening question, targeted follow-up, redirect, next topic, or close interview
 - **AND** the model provider is instructed to ask exactly one question and wait for the user's answer
 
 #### Scenario: Interviewer asks first question

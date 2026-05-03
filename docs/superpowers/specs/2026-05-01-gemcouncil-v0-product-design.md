@@ -2,7 +2,7 @@
 
 ## Goal
 
-GemCouncil v0 is a real voice-first practice product for non-native English speakers preparing for high-pressure English communication. The first release focuses on two practice modes:
+GemCouncil v0 is a real voice-first communication equity product for non-native English speakers preparing for high-pressure English communication. The first release focuses on two practice modes:
 
 - Interview Mode: a one-on-one general English interview simulation.
 - Meeting Mode: a lightweight business meeting simulation with multiple AI participants.
@@ -11,13 +11,17 @@ The product must be usable as a deployed web app, not a scripted mock demo. The 
 
 ## Product Positioning
 
-GemCouncil is not a generic English tutor. It is a pressure-room simulator for people who need to listen, respond, clarify, and explain themselves in English interviews and meetings.
+GemCouncil is not a generic English tutor or a generic interview chatbot. It is a pressure-room simulator and communication equity coach for people who need to listen, respond, clarify, and explain themselves in English interviews and meetings.
 
 The core promise is:
 
 > Practice the room before you enter the room.
 
 The v0 product should make users feel that they are practicing realistic spoken interaction, not filling out an English exercise worksheet.
+
+For the Gemma 4 hackathon, the product should be framed around access to opportunity. A strong candidate should not lose a job, scholarship, research collaboration, or team discussion because they could not afford realistic English communication practice.
+
+GemCouncil should emphasize digital equity for non-native English speakers, future-of-education adaptive spoken practice, safety and trust through explainable feedback, and open-model deployability through remote Gemma and VoxCPM services.
 
 ## Target User
 
@@ -48,6 +52,17 @@ The user can start a general English interview practice session by providing opt
 The system creates one AI interviewer. The interviewer asks questions, listens to the user's spoken answers, asks follow-up questions, and ends the session with structured feedback.
 
 Interview Mode uses one interviewer because that matches common real interviews and keeps voice turn-taking reliable.
+
+Interview Mode should evolve from a general interview into scenario-grounded practice. v0 should support curated scenario packs before relying on live web search:
+
+- General English interview.
+- Software engineering interview.
+- Product manager interview.
+- Research or graduate-school discussion.
+- Scholarship interview.
+- International team meeting.
+
+Each scenario pack should define the interview goal, question plan, interviewer style, evaluation rubric, and strong-answer traits.
 
 ### Meeting Mode
 
@@ -111,6 +126,8 @@ The report includes:
 
 The report should evaluate communication performance, not only grammar. v0 should avoid detailed sentence-by-sentence correction because that would shift the product toward an English proofreading tool.
 
+For Safety & Trust, each score should eventually include evidence: a short quote or paraphrase from the user's answer, why the evidence affected the score, one improved answer example, and one concrete next practice step. This makes the feedback explainable instead of opaque scoring.
+
 ## User Flows
 
 ### Interview Flow
@@ -164,6 +181,8 @@ Meeting Mode uses:
 Agents should use structured outputs where possible. The application should validate model responses before rendering or storing them.
 
 Agents should not be allowed to create unlimited turns. Each session has a clear turn budget so the product remains predictable and affordable.
+
+Interviewer initiative should be represented through explicit action objects rather than free-form text alone. The expected action set is opening question, targeted follow-up, redirect, next topic, and close interview. The language model can write the interviewer wording, but product policy should choose or validate the next action so the session remains realistic, auditable, and demo-stable.
 
 ## Audio Architecture
 
