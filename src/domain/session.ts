@@ -5,6 +5,7 @@ export type SessionStatus = "setup" | "active" | "completed" | "failed";
 export type SpeakerRole = "user" | "interviewer" | "moderator" | "participant";
 
 export interface InterviewSetup {
+  scenarioId?: string;
   goal?: string;
   targetContext?: string;
   selfIntroduction?: string;

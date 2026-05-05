@@ -34,7 +34,12 @@ describe("mock providers", () => {
     const providers = createMockProviderSet();
 
     await expect(providers.context.getContext({ mode: "interview" })).resolves.toMatchObject({
+      title: "General English interview",
       source: "built-in",
+    });
+    await expect(providers.context.getContext({ mode: "interview", topic: "software-engineering" })).resolves.toMatchObject({
+      title: "Software engineering interview",
+      prompts: expect.arrayContaining([expect.stringContaining("technical project")]),
     });
     await expect(
       providers.modelReasoning.generate([{ role: "user", content: "Open the interview proactively" }]),

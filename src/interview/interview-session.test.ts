@@ -13,11 +13,28 @@ describe("interview session state", () => {
     expect(state.session.mode).toBe("interview");
     expect(state.session.status).toBe("setup");
     expect(state.session.setup).toMatchObject({
-      style: "random",
+      scenarioId: "general-english",
+      style: "standard",
       difficulty: "auto",
       goal: "General English interview",
+      targetContext: "General English interview practice",
     });
     expect(state.phase).toBe("setup");
+  });
+
+  it("creates an interview session from a selected scenario pack", () => {
+    const state = createInterviewSession({
+      setup: {
+        scenarioId: "software-engineering",
+      },
+    });
+
+    expect(state.session.setup).toMatchObject({
+      scenarioId: "software-engineering",
+      goal: "Software engineering interview",
+      targetContext: "Software engineering behavioral and project interview",
+      style: "standard",
+    });
   });
 
   it("starts with an interviewer turn and waits while speech plays", () => {

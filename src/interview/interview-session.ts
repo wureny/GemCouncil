@@ -1,4 +1,5 @@
 import type { ConversationTurn, InterviewSetup, PracticeSession } from "@/domain/session";
+import { getInterviewScenarioPack } from "./scenario-packs";
 
 export type InterviewPracticeSession = Omit<PracticeSession, "mode" | "setup"> & {
   mode: "interview";
@@ -56,12 +57,14 @@ export function createInterviewSession(options?: {
   maxUserTurns?: number;
   now?: string;
 }): InterviewRuntimeState {
+  const scenario = getInterviewScenarioPack(options?.setup?.scenarioId);
   const setup: InterviewSetup = {
-    goal: options?.setup?.goal ?? "General English interview",
-    targetContext: options?.setup?.targetContext,
+    scenarioId: scenario.id,
+    goal: options?.setup?.goal ?? scenario.defaultGoal,
+    targetContext: options?.setup?.targetContext ?? scenario.targetContext,
     selfIntroduction: options?.setup?.selfIntroduction,
     backgroundNotes: options?.setup?.backgroundNotes,
-    style: options?.setup?.style ?? "random",
+    style: options?.setup?.style ?? scenario.interviewerStyle,
     difficulty: options?.setup?.difficulty ?? "auto",
   };
 
