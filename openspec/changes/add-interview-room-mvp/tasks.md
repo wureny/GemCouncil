@@ -10,7 +10,7 @@
 - [x] 2.2 Add interviewer turn generation through a model reasoning provider with deterministic mock fallback.
 - [x] 2.3 Add turn budget handling and early session ending.
 - [x] 2.4 Add interviewer policy decisions for proactive openings, targeted follow-ups, and next-question progression.
-- [ ] 2.5 Add scenario packs for grounded interview plans and rubrics.
+- [x] 2.5 Add scenario packs for grounded interview plans and rubrics.
 - [ ] 2.6 Upgrade interviewer policy decisions into function-call-style action objects.
 
 ## 3. Chunked Speech Interaction

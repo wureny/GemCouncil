@@ -1,5 +1,6 @@
 import type { ModelReasoningProvider } from "@/domain/providers";
-import type { PracticeSession } from "@/domain/session";
+import type { InterviewSetup, PracticeSession } from "@/domain/session";
+import { scenarioPromptContext } from "./scenario-packs";
 
 export interface InterviewerResponse {
   text: string;
@@ -51,6 +52,7 @@ export async function generateInterviewerResponse(
   const userTurns = session.turns.filter((turn) => turn.speakerRole === "user");
   const decision = decideInterviewerPolicy(session);
   const latestUserAnswer = userTurns.at(-1)?.text ?? "No user answer yet.";
+  const scenarioContext = session.mode === "interview" ? scenarioPromptContext(session.setup as InterviewSetup) : "";
 
   const response = await provider.generate([
     {
@@ -61,7 +63,7 @@ export async function generateInterviewerResponse(
     {
       role: "user",
       content:
-        `${decision.instruction}\n\nLatest candidate answer: ${latestUserAnswer}`,
+        `${decision.instruction}\n\n${scenarioContext}\n\nLatest candidate answer: ${latestUserAnswer}`,
     },
   ]);
 

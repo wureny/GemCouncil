@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createInterviewSession, interviewReducer } from "./interview-session";
 import { decideInterviewerPolicy, generateInterviewerResponse } from "./interviewer";
+import type { ModelMessage, ModelReasoningProvider, ModelResponse } from "@/domain/providers";
 import { MockModelReasoningProvider } from "@/providers/mock-providers";
 
 describe("generateInterviewerResponse", () => {
@@ -49,4 +50,29 @@ describe("generateInterviewerResponse", () => {
     expect(response.kind).toBe("next_question");
     expect(response.text).toContain("difficult conversation");
   });
+
+  it("includes scenario plan and rubric in model context", async () => {
+    const provider = new RecordingModelReasoningProvider();
+    const state = createInterviewSession({
+      setup: {
+        scenarioId: "product-management",
+      },
+    });
+
+    await generateInterviewerResponse(provider, state.session);
+
+    expect(provider.messages.at(-1)?.content).toContain("Product manager interview");
+    expect(provider.messages.at(-1)?.content).toContain("Question plan:");
+    expect(provider.messages.at(-1)?.content).toContain("Evaluation rubric:");
+    expect(provider.messages.at(-1)?.content).toContain("customer focus");
+  });
 });
+
+class RecordingModelReasoningProvider implements ModelReasoningProvider {
+  messages: ModelMessage[] = [];
+
+  async generate(messages: ModelMessage[]): Promise<ModelResponse> {
+    this.messages = messages;
+    return { text: "Tell me about a product decision you made." };
+  }
+}

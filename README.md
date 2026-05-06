@@ -35,6 +35,7 @@ This repository is in the Interview Room MVP phase. The current OpenSpec change 
 Current Interview Mode status:
 
 - Setup form, interview transcript, mock answer submission, interviewer follow-up generation, and structured feedback are implemented.
+- Interview setup includes scenario packs for general English, software engineering, product management, research discussion, scholarship interview, and international team meeting practice.
 - Audio chunk planning and transcript stitching utilities are implemented so Gemma audio requests can stay below the 30-second per-request limit.
 - Real microphone recording is implemented and currently feeds mock speech understanding.
 - Interviewer speech playback state and replay controls are implemented with a mock speech adapter.
@@ -44,10 +45,9 @@ Current Interview Mode status:
 
 Near-term product priorities:
 
-1. Add scenario packs for role, scholarship, research, and business meeting practice.
-2. Upgrade interviewer policy into function-call-style agent actions.
-3. Make feedback evidence-based by citing user answer snippets for each score.
-4. Add a concise demo script and submission writeup around communication equity.
+1. Upgrade interviewer policy into function-call-style agent actions.
+2. Make feedback evidence-based by citing user answer snippets for each score.
+3. Add a concise demo script and submission writeup around communication equity.
 
 ## Development
 
