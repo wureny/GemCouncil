@@ -3,24 +3,28 @@ import type { PracticeSession } from "@/domain/session";
 
 export interface InterviewerResponse {
   text: string;
-  kind: "first_question" | "follow_up" | "next_question";
+  action: InterviewerAction;
 }
 
-interface InterviewerPolicyDecision {
-  kind: InterviewerResponse["kind"];
+export type InterviewerActionType = "opening_question" | "targeted_follow_up" | "redirect" | "next_topic" | "close_interview";
+
+export interface InterviewerAction {
+  type: InterviewerActionType;
   instruction: string;
+  reason?: string;
 }
 
 const vagueAnswerMarkers = ["not sure", "i don't know", "maybe", "kind of", "something"];
 
-export function decideInterviewerPolicy(session: PracticeSession): InterviewerPolicyDecision {
+export function decideInterviewerPolicy(session: PracticeSession): InterviewerAction {
   const userTurns = session.turns.filter((turn) => turn.speakerRole === "user");
 
   if (userTurns.length === 0) {
     return {
-      kind: "first_question",
+      type: "opening_question",
       instruction:
         "Open the interview proactively with a brief professional greeting and ask exactly one first question.",
+      reason: "The candidate has not answered yet.",
     };
   }
 
@@ -31,16 +35,18 @@ export function decideInterviewerPolicy(session: PracticeSession): InterviewerPo
 
   if (shouldFollowUp) {
     return {
-      kind: "follow_up",
+      type: "targeted_follow_up",
       instruction:
         "Ask exactly one targeted follow-up because the candidate's latest answer needs more concrete detail.",
+      reason: "The candidate's latest answer was short or vague.",
     };
   }
 
   return {
-    kind: "next_question",
+    type: "next_topic",
     instruction:
       "Briefly acknowledge the answer and move the interview forward with exactly one new question.",
+    reason: "The candidate gave enough signal to advance.",
   };
 }
 
@@ -61,9 +67,9 @@ export async function generateInterviewerResponse(
     {
       role: "user",
       content:
-        `${decision.instruction}\n\nLatest candidate answer: ${latestUserAnswer}`,
+        `Interviewer action: ${decision.type}\nAction reason: ${decision.reason ?? "Not specified."}\nAction instruction: ${decision.instruction}\n\nLatest candidate answer: ${latestUserAnswer}`,
     },
   ]);
 
-  return { text: response.text, kind: decision.kind };
+  return { text: response.text, action: decision };
 }
