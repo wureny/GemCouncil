@@ -41,11 +41,12 @@ Current Interview Mode status:
 - Interviewer speech playback state and replay controls are implemented with a mock speech adapter.
 - Gemma speech understanding can be enabled through the `services/gemma-speech` FastAPI service and `NEXT_PUBLIC_SPEECH_UNDERSTANDING_PROVIDER=gemma`.
 - VoxCPM TTS can be enabled through the `services/voxcpm-tts` FastAPI service and `NEXT_PUBLIC_SPEECH_OUTPUT_PROVIDER=voxcpm`.
+- Interviewer behavior now uses explicit action objects before model generation, so the interviewer can open, follow up, or advance the interview deliberately instead of acting like a passive chatbot.
 - Meeting Mode remains deferred until Interview Room is usable with real voice providers.
 
 Near-term product priorities:
 
-1. Upgrade interviewer policy into function-call-style agent actions.
+1. Add scenario packs for role, scholarship, research, and business meeting practice.
 2. Make feedback evidence-based by citing user answer snippets for each score.
 3. Add a concise demo script and submission writeup around communication equity.
 

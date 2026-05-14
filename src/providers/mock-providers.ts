@@ -39,11 +39,11 @@ export class MockModelReasoningProvider implements ModelReasoningProvider {
   async generate(messages: ModelMessage[]): Promise<ModelResponse> {
     const last = messages.at(-1)?.content ?? "";
 
-    if (last.includes("Open the interview proactively")) {
+    if (last.includes("Interviewer action: opening_question") || last.includes("Open the interview proactively")) {
       return { text: "To start, could you tell me about yourself and what you are hoping to practice today?" };
     }
 
-    if (last.includes("move the interview forward")) {
+    if (last.includes("Interviewer action: next_topic")) {
       return {
         text: "Thanks, that gives me a clearer picture. Now tell me about a difficult conversation you handled in English.",
       };
