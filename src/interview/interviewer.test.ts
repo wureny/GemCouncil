@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createInterviewSession, interviewReducer } from "./interview-session";
 import { decideInterviewerPolicy, generateInterviewerResponse } from "./interviewer";
+import type { ModelMessage, ModelReasoningProvider, ModelResponse } from "@/domain/providers";
 import { MockModelReasoningProvider } from "@/providers/mock-providers";
 
 describe("generateInterviewerResponse", () => {
@@ -75,3 +76,12 @@ describe("generateInterviewerResponse", () => {
     expect(prompts[0]).toContain("Action instruction: Briefly acknowledge the answer");
   });
 });
+
+class RecordingModelReasoningProvider implements ModelReasoningProvider {
+  messages: ModelMessage[] = [];
+
+  async generate(messages: ModelMessage[]): Promise<ModelResponse> {
+    this.messages = messages;
+    return { text: "Tell me about a product decision you made." };
+  }
+}

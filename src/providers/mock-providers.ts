@@ -12,6 +12,7 @@ import type {
   VoiceProfile,
 } from "@/domain/providers";
 import type { PracticeSession } from "@/domain/session";
+import { getInterviewScenarioPack } from "@/interview/scenario-packs";
 
 export class MockSpeechUnderstandingProvider implements SpeechUnderstandingProvider {
   async understand(input: AudioInput, session: PracticeSession): Promise<SpeechUnderstanding> {
@@ -56,14 +57,10 @@ export class MockModelReasoningProvider implements ModelReasoningProvider {
 
 export class MockContextProvider implements ContextProvider {
   async getContext(request: Parameters<ContextProvider["getContext"]>[0]): Promise<ContextResult> {
-    void request;
+    const scenario = getInterviewScenarioPack(request.topic);
     return {
-      title: "General English interview",
-      prompts: [
-        "Tell me about yourself.",
-        "Describe a challenge you handled well.",
-        "What would you like to improve next?",
-      ],
+      title: scenario.label,
+      prompts: scenario.questionPlan,
       source: "built-in",
     };
   }
